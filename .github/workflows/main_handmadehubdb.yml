@@ -22,9 +22,13 @@ jobs:
         run: npm install
         working-directory: ./backend
 
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: handmadehubdb # Your Azure Web App name
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          app-name: handmadehubdb
           package: ./backend
