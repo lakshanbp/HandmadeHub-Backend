@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://witty-sand-0e78f971e.2.azurestaticapps.net',
+    'https://orange-moss-001332f00.2.azurestaticapps.net',
     process.env.FRONTEND_URL
   ].filter(Boolean),
   credentials: true,

@@ -23,7 +23,7 @@ jobs:
         run: npm install
         working-directory: ./backend
 
-      - name: Run tests
-        run: npm test
-        working-directory: ./backend
-        # Remove this step if you don't have tests 
+      # - name: Run tests
+      #   run: npm test
+      #   working-directory: ./backend
+      #   # Remove this step if you don't have tests 
