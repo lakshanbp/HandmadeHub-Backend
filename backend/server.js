@@ -45,14 +45,8 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
-
-<<<<<<< HEAD
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
-=======
 // Connect to MongoDB (with recommended options)
 mongoose.connect(process.env.MONGO_URI, {
->>>>>>> ca1ebe64bc49df0b370c70c17db28976b4fb5139
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
