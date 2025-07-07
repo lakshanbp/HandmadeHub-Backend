@@ -1,4 +1,5 @@
-console.log('Handmade Hub backend starting...');
+console.log('Server starting...');
+
 process.on('uncaughtException', err => {
   console.error('Uncaught Exception:', err);
 });
@@ -12,15 +13,12 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const helmet = require('helmet'); // Security middleware
+const helmet = require('helmet');
 
 // Load environment variables
 dotenv.config();
 
-// Initialize app
 const app = express();
-
-// Security headers
 app.use(helmet());
 
 // Log request origin for CORS debugging
@@ -29,11 +27,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Use only the correct CORS configuration
+// CORS configuration
 app.use(cors({
   origin: [
-    'http://localhost:3000',
-    'https://orange-moss-001332f00.2.azurestaticapps.net',
     process.env.FRONTEND_URL
   ].filter(Boolean),
   credentials: true,
@@ -41,7 +37,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
-// Middleware
 app.use(express.json());
 
 // Ensure uploads directory exists
@@ -49,11 +44,9 @@ const uploadsDir = path.join(__dirname, 'public/uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
-
-// Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
-// Connect to MongoDB (with recommended options)
+// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -61,6 +54,22 @@ mongoose.connect(process.env.MONGODB_URI, {
   console.log('MongoDB connected');
 }).catch(err => {
   console.error('MongoDB connection error:', err);
+  process.exit(1); // Exit if DB connection fails
+});
+
+// Import your actual Product model
+const Product = require('./models/Product');
+
+// Sample /api/products route with error handling
+app.get('/api/products', async (req, res, next) => {
+  try {
+    console.log('GET /api/products called');
+    const products = await Product.find();
+    res.json(products);
+  } catch (err) {
+    console.error('Error in /api/products:', err);
+    next(err);
+  }
 });
 
 // Swagger setup
@@ -79,7 +88,7 @@ const paymentRoutes = require('./routes/payments');
 // Use routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/products', productRoutes);
+// app.use('/api/products', productRoutes); // Commented out to avoid duplicate route
 app.use('/api/orders', orderRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/artisan-requests', artisanRequestRoutes);
@@ -93,7 +102,7 @@ app.use((req, res) => {
 
 // Error handler middleware
 app.use((err, req, res, next) => {
-  console.error('Error handler:', err);
+  console.error('Error handler:', err.stack || err);
   res.status(500).json({ error: err.message || 'Internal server error' });
 });
 
