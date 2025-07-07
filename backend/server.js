@@ -85,6 +85,11 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/artisan-requests', artisanRequestRoutes);
 app.use('/api/payments', paymentRoutes);
 
+app.get('/', (req, res) => {
+  res.send('✅ Handmade Hub backend is running');
+});
+
+
 // 404 handler
 app.use((req, res) => {
   console.log('404 handler hit for:', req.method, req.originalUrl);
