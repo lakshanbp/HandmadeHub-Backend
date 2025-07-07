@@ -22,11 +22,8 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: ./backend
-<<<<<<< HEAD
 
       # - name: Run tests
       #   run: npm test
       #   working-directory: ./backend
       #   # Remove this step if you don't have tests 
-=======
->>>>>>> 6f1b399a5d3d9dc0afc2ed0bb26001ee35b976e3

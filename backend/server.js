@@ -46,8 +46,13 @@ if (!fs.existsSync(uploadsDir)) {
 }
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
+<<<<<<< HEAD
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
+=======
+// Connect to MongoDB (with recommended options)
+mongoose.connect(process.env.MONGO_URI, {
+>>>>>>> ca1ebe64bc49df0b370c70c17db28976b4fb5139
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
@@ -94,6 +99,11 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/artisan-requests', artisanRequestRoutes);
 app.use('/api/payments', paymentRoutes);
 
+app.get('/', (req, res) => {
+  res.send('✅ Handmade Hub backend is running');
+});
+
+
 // 404 handler
 app.use((req, res) => {
   console.log('404 handler hit for:', req.method, req.originalUrl);
@@ -106,8 +116,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || 'Internal server error' });
 });
 
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// // Start server
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => {
+//   console.log(`Server running on http://localhost:${PORT}`);
+// });
+const PORT = process.env.PORT || 3000; // fallback doesn't matter much
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Server running on port ${PORT}`);
 });
